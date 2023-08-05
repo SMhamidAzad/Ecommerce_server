@@ -9,7 +9,7 @@ app.use(morgan("dev"))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
 
-app.use('/api',userRouter)
+app.use('/api/users',userRouter)
 app.get('/test',(req,res)=>{
     res.send("Server is running")
 })

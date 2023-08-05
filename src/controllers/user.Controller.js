@@ -1,5 +1,7 @@
 const createHttpError = require("http-errors");
 const User = require("../models/user.Modal");
+const { updateUser, userBulkUpdate, userDeleteByIdService, userBulkDeleteServies } = require("../services/user.service");
+const mongoose = require("mongoose");
 
 module.exports.createAuser = async (req, res,next) => {
     try {
@@ -47,3 +49,76 @@ module.exports.getAllUser = async (req, res,next) => {
        next(error)
     }
 }
+
+module.exports.getAUser= async(req,res,next)=>{
+    try {
+        const {id}=req.params;
+        // const options = {password: 0}
+        const user = await User.findById(id);
+        res.status(200).json({
+            message: "success",
+            result: user
+        })
+    } catch (error) {
+        if(error instanceof mongoose.Error){
+            next(createHttpError(400,"Invalid user id"))
+            return;
+        }
+        next(error)
+    }
+}
+
+module.exports.updateAuser = async (req, res,next) => {
+    try {
+        const {id}=req.params;
+        const result =await updateUser(id,req.body)
+        res.status(200).json({
+            message: "success",
+            result: result
+        })
+    } catch (error) {
+       next(error)
+    }
+}
+
+
+module.exports.userBulkUpdate = async (req, res,next) => {
+    try {
+        const result =await userBulkUpdate(req.body)
+        res.status(200).json({
+            message: "success",
+            result: result
+        })
+    } catch (error) {
+       next(error)
+    }
+}
+
+module.exports.userDeleteById = async (req, res,next) => {
+    try {
+        const {id}=req.params;
+        const result =await userDeleteByIdService(id)
+        res.status(200).json({
+            message: "success",
+            result: result
+        })
+    } catch (error) {
+       next(error)
+    }
+}
+module.exports.userBulkDelete = async (req, res,next) => {
+    try {
+        const result =await userBulkDeleteServies(req.body.ids)
+        res.status(200).json({
+            message: "success",
+            result: result
+        })
+    } catch (error) {
+       next(error)
+    }
+}
+
+
+// const queryObj = {...req.query}
+// excludedFields = ["limit","sort","page"];
+// excludedFields.foreach(field=> delete queryObj[fields])
