@@ -4,12 +4,16 @@ const createError = require('http-errors')
 const bodyParser = require('body-parser')
 const app = express();
 const userRouter = require('./routers/user.Route');
+const shopRouter = require('./routers/shop.route');
+const productRouter = require('./routers/product.Route');
 
 app.use(morgan("dev"))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
 
 app.use('/api/users',userRouter)
+app.use('/api/item',productRouter)
+app.use('/api/shop',shopRouter)
 app.get('/test',(req,res)=>{
     res.send("Server is running")
 })
