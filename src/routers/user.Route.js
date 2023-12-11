@@ -1,7 +1,8 @@
 const router = require('express').Router();
 const userController = require('../controllers/user.Controller')
 
-router.post("/",userController.createAuser)
+router.post("/create",userController.createAuser)
+router.post("/login",userController.loginAuser)
 router.get("/",userController.getAllUser)
 router.get("/:id",userController.getAUser)
 router.put("/bulk-update",userController.userBulkUpdate)

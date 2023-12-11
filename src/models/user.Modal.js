@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const bcrypt = require('bcrypt')
 
 const userSchema = new mongoose.Schema({
-    name: {
+    fullname: {
         type: String,
         required: [true, 'User name is required!'],
         trim: true,
@@ -37,9 +37,9 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: ""
     },
-    isAdmin: {
-        type: Boolean,
-        default: false
+    role: {
+        type: String,
+        default: "guest"
     },
     isBanned: {
         type: Boolean,
@@ -49,8 +49,6 @@ const userSchema = new mongoose.Schema({
 
 userSchema.set("toJSON", {
     transform: (document, returnedObject) => {
-      // returnedObject.id = returnedObject._id.toString();
-    //   delete returnedObject._id;
       delete returnedObject.__v;
       delete returnedObject.updatedAt;
       delete returnedObject.createdAt;

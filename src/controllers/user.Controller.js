@@ -2,17 +2,52 @@ const createHttpError = require("http-errors");
 const User = require("../models/user.Modal");
 const { updateUser, userBulkUpdate, userDeleteByIdService, userBulkDeleteServies } = require("../services/user.service");
 const mongoose = require("mongoose");
+const { tokenGenerate } = require("../helper/jsonwebtoken");
+const bcrypt = require('bcrypt')
 
 module.exports.createAuser = async (req, res,next) => {
     try {
-        const newUser = new User(req.body);
-        const user = await newUser.save()
+        console.log('reqqqqqqqqq',req.body)
+         const newUser = new User(req.body);
+         const user = await newUser.save();
+         console.log('hlww',user)
         res.status(200).json({
             message: "success",
             result: user
         })
     } catch (error) {
        next(error)
+    }
+}
+
+module.exports.loginAuser = async (req,res,next)=>{
+    try {
+        const user = await User.findOne({ email: req.body.email })
+        if (!user) {
+            res.status(404).send({
+                message: "No user Found!"
+            });
+        } else {
+            if (!req.body.email || !req.body.password) {
+                res.send({ message: "Email and Password must be required!" })
+            } else {
+                const validPassword = await bcrypt.compare(req.body.password, user.password);
+                if (!validPassword) {
+                    res.status(403).send({ message: "Wrong Password!" });
+                } else {
+                    // const token = tokenGenerate(user);
+                    res.status(200).json({
+                        message: "user logged in successfully",
+                        data: user
+                        // data: {
+                        //     token: token
+                        // }
+                    })
+                }
+            }
+        }
+   } catch (error) {
+       next(error) 
     }
 }
 

@@ -4,16 +4,24 @@ const createError = require('http-errors')
 const bodyParser = require('body-parser')
 const app = express();
 const userRouter = require('./routers/user.Route');
-const shopRouter = require('./routers/shop.route');
-const productRouter = require('./routers/product.Route');
+const residentRouter = require('./routers/resident.Route');
+const houseRouter = require('./routers/house.Route');
+const helmet = require("helmet");
+const cors = require("cors");
 
+app.use(cors({
+    origin: 'http://localhost:5173'
+}));
+// middleware
+app.use(express.json());
+app.use(helmet());
 app.use(morgan("dev"))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
 
-app.use('/api/users',userRouter)
-app.use('/api/item',productRouter)
-app.use('/api/shop',shopRouter)
+app.use('/api/house',houseRouter)
+app.use('/api/user',userRouter)
+app.use('/api/resident',residentRouter)
 app.get('/test',(req,res)=>{
     res.send("Server is running")
 })
